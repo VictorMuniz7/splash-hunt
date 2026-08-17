@@ -1,0 +1,50 @@
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#1A0529]">
+  <div class="wave-tier absolute bottom-0 left-0 h-72 w-full origin-bottom sm:h-96">
+    <div class="wave-track flex h-full w-[200%] opacity-30" data-duration="46000">
+      @for (copy of [0, 1]; track copy) {
+        <svg class="h-full w-1/2 shrink-0" viewBox="0 0 1600 200" preserveAspectRatio="none">
+          <path
+            d="M0,120 C100,60 300,180 400,120 C500,60 700,180 800,120 C900,60 1100,180 1200,120 C1300,60 1500,180 1600,120 V200 H0 Z"
+            fill="#12031f"
+          />
+        </svg>
+      }
+    </div>
+  </div>
+
+  <div class="wave-tier absolute bottom-0 left-0 h-56 w-full origin-bottom sm:h-80">
+    <div
+      class="wave-track flex h-full w-[200%] opacity-40"
+      data-duration="32000"
+      data-direction="reverse"
+    >
+      @for (copy of [0, 1]; track copy) {
+        <svg class="h-full w-1/2 shrink-0" viewBox="0 0 1600 200" preserveAspectRatio="none">
+          <path
+            d="M0,140 C120,90 280,190 400,140 C520,90 680,190 800,140 C920,90 1080,190 1200,140 C1320,90 1480,190 1600,140 V200 H0 Z"
+            fill="#0c0116"
+          />
+        </svg>
+      }
+    </div>
+  </div>
+
+  <div class="wave-tier absolute bottom-0 left-0 h-44 w-full origin-bottom sm:h-64">
+    <div class="wave-track flex h-full w-[200%] opacity-50" data-duration="24000">
+      @for (copy of [0, 1]; track copy) {
+        <svg class="h-full w-1/2 shrink-0" viewBox="0 0 1600 200" preserveAspectRatio="none">
+          <path
+            d="M0,150 C110,110 290,190 400,150 C510,110 690,190 800,150 C910,110 1090,190 1200,150 C1310,110 1490,190 1600,150 V200 H0 Z"
+            fill="#220a35"
+          />
+        </svg>
+      }
+    </div>
+  </div>
+
+  <div
+    class="hero-spotlight pointer-events-none absolute bottom-0 left-1/2 h-72 w-[70vw] -translate-x-1/2 rounded-full bg-splash-magenta/0 blur-3xl"
+  ></div>
+
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
+</div>

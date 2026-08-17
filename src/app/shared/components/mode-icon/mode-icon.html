@@ -1,0 +1,29 @@
+@switch (mode()) {
+  @case (GameMode.Vulto) {
+    <svg viewBox="0 0 48 48" class="h-full w-full" aria-hidden="true">
+      <g fill="currentColor">
+        <circle cx="15" cy="31" r="7" opacity="0.55" />
+        <circle cx="25" cy="19" r="9.5" opacity="0.8" />
+        <circle cx="35" cy="30" r="6.5" opacity="0.5" />
+        <circle cx="21" cy="35" r="5" opacity="0.65" />
+      </g>
+    </svg>
+  }
+  @case (GameMode.PretoEBranco) {
+    <svg viewBox="0 0 48 48" class="h-full w-full" aria-hidden="true">
+      <rect x="3" y="3" width="42" height="42" rx="4" fill="#f4e9d8" />
+      <path d="M3 3 H45 V45 Z" fill="#0c0116" />
+      <rect
+        x="3"
+        y="3"
+        width="42"
+        height="42"
+        rx="4"
+        fill="none"
+        stroke="currentColor"
+        stroke-opacity="0.45"
+        stroke-width="2"
+      />
+    </svg>
+  }
+}

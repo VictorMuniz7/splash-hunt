@@ -1,3 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/*
+ * Self-hosted (instead of Google Fonts) so the page doesn't pay for two extra
+ * DNS/TLS round-trips to fonts.googleapis.com / fonts.gstatic.com — the files
+ * are served, cached and compressed right alongside the rest of the build.
+ * Latin-only subset: covers Portuguese and English, the app's only locales.
+ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  /* Referenced from src/ (not public/) and via a relative path, so esbuild
+     bundles + hashes the font and rewrites this url() to a path relative to
+     the compiled CSS file. A public/ + absolute "/fonts/..." path instead
+     resolves from the domain root at runtime — breaks once the app is
+     deployed under a subpath (e.g. GitHub Pages' /repo-name/). */
+  src: url('./assets/fonts/inter-400-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Metal Mania';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/metal-mania-400.woff2') format('woff2');
+}
+
+@theme {
+  --color-splash-bg: #1a0529;
+  --color-splash-bg-deep: #0c0116;
+  --color-splash-purple: #7c3aed;
+  --color-splash-magenta: #b23aed;
+  --color-splash-gold: #c9a959;
+  --color-splash-wine: #8b1e3f;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-splash-bg);
+    color: #f4e9d8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+.title-font {
+  font-family: 'Metal Mania', system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 10px rgba(178, 58, 237, 0.55),
+    0 0 26px rgba(139, 30, 63, 0.4);
+}
+
+/*
+ * Elongated hexagon "banner" plank — flat top/bottom edge with pointed
+ * left/right tips, gold-trimmed. Used for the champion/skin selectors and
+ * the attempt tiles. The second, softer outline is done with drop-shadow
+ * (not box-shadow) specifically because clip-path clips away box-shadow but
+ * lets a drop-shadow filter bleed past the clipped silhouette, echoing the
+ * hex outline a little further out — like the doubled line in the reference.
+ */
+.hex-banner {
+  position: relative;
+  clip-path: polygon(3% 0%, 97% 0%, 100% 50%, 97% 100%, 3% 100%, 0% 50%);
+  background: linear-gradient(165deg, rgba(15, 4, 24, 0.92), rgba(21, 5, 33, 0.88));
+  border: 1.5px solid var(--color-splash-gold);
+  filter: drop-shadow(0 0 3px rgba(201, 169, 89, 0.55));
+}
+
+.hex-banner--win {
+  border-color: #34d399;
+  filter: drop-shadow(0 0 3px rgba(52, 211, 153, 0.5));
+}
+
+.hex-banner--lose {
+  border-color: var(--color-splash-wine);
+  filter: drop-shadow(0 0 3px rgba(139, 30, 63, 0.55));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(201, 169, 89, 0.25);
+  border-radius: 999px;
+}

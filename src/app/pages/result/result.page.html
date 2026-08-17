@@ -1,0 +1,59 @@
+@if (result(); as result) {
+  <section class="flex flex-1 flex-col items-center gap-6 px-4 py-8 sm:py-12">
+    <app-mode-badges [modes]="result.activeModes" />
+
+    <div
+      #revealBox
+      class="relative mx-auto aspect-[1215/717] w-full max-w-2xl overflow-hidden rounded-2xl border-2 opacity-0 shadow-2xl shadow-black/60"
+      [class]="isWin() ? 'border-splash-gold/50' : 'border-splash-wine/50'"
+    >
+      <img
+        class="h-full w-full object-contain"
+        [src]="result.target.splashUrl"
+        [alt]="result.target.championName + ' — ' + result.target.skinLabel"
+      />
+      <div
+        class="reveal-flash pointer-events-none absolute inset-0"
+        [class]="isWin() ? 'bg-splash-gold/60' : 'bg-splash-wine/60'"
+      ></div>
+    </div>
+
+    <div
+      #resultCard
+      class="flex w-full max-w-md flex-col items-center gap-3 rounded-2xl border border-splash-gold/20 bg-black/30 p-6 text-center opacity-0"
+    >
+      <h2 class="title-font text-2xl" [class]="isWin() ? 'text-splash-gold' : 'text-splash-wine'">
+        {{ isWin() ? i18n.t('result.win') : i18n.t('result.lose') }}
+      </h2>
+      <p class="text-sm text-[#cbb9d6]/80">
+        <span class="font-semibold text-[#f4e9d8]">{{ result.target.championName }}</span>
+        — {{ result.target.skinLabel }}
+      </p>
+
+      <div
+        class="mt-2 flex w-full items-center justify-around border-t border-splash-gold/15 pt-4 text-sm"
+      >
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-xl font-semibold text-[#f4e9d8]">{{ result.attempts.length }}</span>
+          <span class="text-[11px] uppercase tracking-wide text-[#cbb9d6]/60">{{
+            i18n.t('result.attemptsLabel')
+          }}</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-xl font-semibold text-[#f4e9d8]">{{ formattedTime() }}</span>
+          <span class="text-[11px] uppercase tracking-wide text-[#cbb9d6]/60">{{
+            i18n.t('result.timeLabel')
+          }}</span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="mt-3 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30"
+        (click)="playAgain()"
+      >
+        {{ i18n.t('result.playAgain') }}
+      </button>
+    </div>
+  </section>
+}

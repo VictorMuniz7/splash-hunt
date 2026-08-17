@@ -1,0 +1,21 @@
+<header class="relative z-10 flex w-full items-center justify-center px-4 pb-2 pt-6 sm:pt-8">
+  <button
+    type="button"
+    class="absolute right-4 top-5 cursor-pointer rounded-full border border-splash-gold/30 bg-black/30 px-3 py-1 text-xs font-semibold tracking-widest text-splash-gold/90 transition hover:border-splash-gold/60 hover:bg-black/50 sm:right-6 sm:top-7"
+    [attr.aria-label]="'Switch language / Mudar idioma'"
+    (click)="i18n.toggle()"
+  >
+    {{ i18n.t('language.switchTo') }}
+  </button>
+
+  <div class="flex items-center gap-3 sm:gap-5">
+    <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-splash-gold/60 sm:h-7 sm:w-7" aria-hidden="true">
+      <path d="M12 0 L15 9 L24 12 L15 15 L12 24 L9 15 L0 12 L9 9 Z" fill="currentColor" />
+    </svg>
+    <h1 class="title-font select-none text-3xl text-[#f4e9d8] sm:text-5xl">SPLASH HUNT</h1>
+    <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-splash-gold/60 sm:h-7 sm:w-7" aria-hidden="true">
+      <path d="M12 0 L15 9 L24 12 L15 15 L12 24 L9 15 L0 12 L9 9 Z" fill="currentColor" />
+    </svg>
+  </div>
+</header>
+<div class="relative z-10 mx-auto h-px w-2/3 max-w-md bg-gradient-to-r from-transparent via-splash-gold/40 to-transparent"></div>

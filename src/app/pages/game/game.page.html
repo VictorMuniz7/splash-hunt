@@ -1,0 +1,89 @@
+<section
+  class="grid flex-1 grid-cols-1 gap-8 px-4 py-8 pb-24 sm:py-10 sm:pb-28 lg:grid-cols-[1fr_minmax(0,46rem)_1fr] lg:items-start lg:gap-6 lg:px-6"
+>
+  <div class="hidden lg:block" aria-hidden="true"></div>
+
+  <div class="flex w-full max-w-2xl flex-col items-center gap-5 justify-self-center">
+    <app-mode-badges [modes]="activeModes()" />
+
+    <span
+      class="rounded-full border border-splash-gold/25 bg-black/30 px-4 py-1.5 font-mono text-sm tracking-widest text-splash-gold"
+    >
+      {{ formattedTime() }}
+    </span>
+
+    <div
+      #imageBox
+      class="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl border-2 border-splash-gold/25 bg-black/40 shadow-2xl shadow-black/60"
+    >
+      @if (loading()) {
+        <div class="flex h-full items-center justify-center">
+          <p class="text-sm text-[#cbb9d6]/60">{{ i18n.t('game.loading') }}</p>
+        </div>
+      } @else if (isVultoActive() && vultoHidden() && status() === 'playing') {
+        <div
+          class="vulto-veil flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#1a0529] to-black"
+        >
+          <span class="h-16 w-16 text-splash-gold/60"><app-mode-icon [mode]="GameMode.Vulto" /></span>
+          <p class="text-4xl font-semibold text-splash-wine">{{ vultoCountdown() }}</p>
+          <p class="text-[11px] uppercase tracking-widest text-[#cbb9d6]/50">
+            {{ i18n.t('game.secondsRemaining') }}
+          </p>
+        </div>
+      } @else if (target(); as splash) {
+        <div
+          #splashImg
+          class="splash-img h-full w-full bg-no-repeat"
+          [class.grayscale]="isPretoEBrancoActive() && status() === 'playing'"
+          [style.background-image]="'url(' + splash.splashUrl + ')'"
+          [style.background-position]="focalPoint().x + '% ' + focalPoint().y + '%'"
+          role="img"
+          [attr.aria-label]="i18n.t('game.imageAlt')"
+        ></div>
+      }
+    </div>
+
+    <div class="flex w-full max-w-md flex-col gap-3">
+      <app-combobox
+        [options]="championOptions()"
+        [(selected)]="selectedChampion"
+        [placeholder]="i18n.t('game.championPlaceholder')"
+      />
+      <app-combobox
+        [options]="skinOptions()"
+        [(selected)]="selectedSkin"
+        [disabled]="!selectedChampion()"
+        [placeholder]="skinsLoading() ? i18n.t('game.skinPlaceholderLoading') : i18n.t('game.skinPlaceholder')"
+      />
+
+      <button
+        type="button"
+        class="mt-1 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="!canSubmit()"
+        (click)="submit()"
+      >
+        {{ i18n.t('game.submit') }}
+      </button>
+    </div>
+  </div>
+
+  <aside class="w-full max-w-md justify-self-center lg:w-72 lg:justify-self-end">
+    <h2 class="mb-2 text-xs uppercase tracking-widest text-[#cbb9d6]/60">{{ i18n.t('game.attemptsTitle') }}</h2>
+    <ul
+      class="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-xl border border-splash-gold/15 bg-black/25 p-3 lg:max-h-[28rem]"
+    >
+      @for (attempt of attempts(); track $index) {
+        <li
+          appEnterAnimate
+          class="hex-banner flex items-center justify-between gap-2 px-5 py-2 text-sm"
+          [class]="attempt.correct ? 'hex-banner--win text-emerald-200' : 'hex-banner--lose text-[#f0d7de]'"
+        >
+          <span class="truncate">{{ attempt.championName }} — {{ attempt.skinLabel }}</span>
+          <span class="shrink-0 text-xs">{{ attempt.correct ? '✓' : '✕' }}</span>
+        </li>
+      } @empty {
+        <li class="px-1 py-6 text-center text-xs text-[#cbb9d6]/40">{{ i18n.t('game.noAttempts') }}</li>
+      }
+    </ul>
+  </aside>
+</section>

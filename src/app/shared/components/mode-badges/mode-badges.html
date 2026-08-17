@@ -1,0 +1,14 @@
+@if (modes().length) {
+  <div class="flex flex-wrap items-center justify-center gap-2">
+    @for (mode of modes(); track mode) {
+      <span
+        class="flex items-center gap-1.5 rounded-full border border-splash-gold/30 bg-black/30 px-3 py-1 text-xs tracking-wide text-splash-gold/90"
+      >
+        <span class="h-4 w-4 text-splash-gold">
+          <app-mode-icon [mode]="mode" />
+        </span>
+        {{ label(mode) }}
+      </span>
+    }
+  </div>
+}

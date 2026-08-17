@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+# workflow_dispatch = no automatic trigger. The workflow only runs when
+# someone clicks "Run workflow" on the Actions tab (or calls the API/gh CLI).
+# That's the "manual deploy" part: you decide exactly when main goes live.
+on:
+  workflow_dispatch:
+
+# Minimum permissions GitHub Pages deployment needs:
+# - contents: read   -> checkout the repo
+# - pages: write     -> publish to the Pages environment
+# - id-token: write  -> get a short-lived OIDC token to authenticate the
+#                        deploy, instead of a long-lived secret/PAT
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If someone triggers a second deploy while one is already running, cancel
+# the older one instead of letting two deploys race each other.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (production)
+        # --base-href matches the GitHub Pages URL path (https://<user>.github.io/<repo>/).
+        # Only needed for this build — local `ng serve`/`ng build` are untouched.
+        run: npx ng build --base-href /splash-hunt/
+
+      - name: Prepare for GitHub Pages
+        # GitHub Pages has no server-side routing: a hard refresh on /jogar
+        # would 404 without this. Serving index.html as 404.html makes GH
+        # Pages fall back to the Angular app, which then reads the URL and
+        # renders the right route client-side. .nojekyll stops GitHub from
+        # running the output through Jekyll (which ignores _-prefixed files).
+        run: |
+          cp dist/splash-hunt/browser/index.html dist/splash-hunt/browser/404.html
+          touch dist/splash-hunt/browser/.nojekyll
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/splash-hunt/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

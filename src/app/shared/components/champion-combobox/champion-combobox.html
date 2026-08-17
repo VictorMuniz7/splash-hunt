@@ -1,0 +1,27 @@
+<div class="relative">
+  <input
+    type="text"
+    class="hex-banner w-full px-7 py-2.5 text-sm text-[#f4e9d8] outline-none transition focus:border-splash-magenta/70 placeholder:text-[#cbb9d6]/40 disabled:cursor-not-allowed disabled:opacity-40"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [value]="query()"
+    (input)="onInput($any($event.target).value)"
+    (focus)="onFocus()"
+    (keydown)="onKeydown($event)"
+    autocomplete="off"
+  />
+  @if (open() && !disabled()) {
+    <div
+      class="absolute z-20 max-h-56 w-full overflow-y-auto rounded-lg border border-splash-gold/20 bg-[#150324] shadow-xl shadow-black/50"
+      [class]="dropUp() ? 'bottom-full mb-1' : 'top-full mt-1'"
+    >
+      @for (option of filtered(); track option.id; let i = $index) {
+        <button type="button" [class]="optionClass(i)" (click)="select(option)">
+          {{ option.label }}
+        </button>
+      } @empty {
+        <p class="px-4 py-2 text-sm text-[#cbb9d6]/50">{{ i18n.t('game.noResults') }}</p>
+      }
+    </div>
+  }
+</div>
