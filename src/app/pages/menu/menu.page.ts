@@ -7,7 +7,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { animate } from 'animejs/animation';
+import { JSAnimation, animate } from 'animejs/animation';
 import { AmbianceService } from '../../core/services/ambiance.service';
 import { GameMode } from '../../core/models/game.model';
 import { GameService } from '../../core/services/game.service';
@@ -29,6 +29,9 @@ export class MenuPage implements AfterViewInit, OnDestroy {
   readonly pbActive = signal(false);
 
   private readonly sceneRoot = viewChild<ElementRef<HTMLElement>>('sceneRoot');
+  private readonly playIcon = viewChild<ElementRef<HTMLElement>>('playIcon');
+
+  private breathingAnimation?: JSAnimation;
 
   ngAfterViewInit(): void {
     const scene = this.sceneRoot()?.nativeElement;
@@ -38,6 +41,19 @@ export class MenuPage implements AfterViewInit, OnDestroy {
         translateY: [18, 0],
         duration: 700,
         ease: 'outQuad',
+      });
+    }
+
+    const icon = this.playIcon()?.nativeElement;
+    if (icon) {
+      // Slow, continuous "breathing" so the play glyph feels alive at rest,
+      // not just on hover.
+      this.breathingAnimation = animate(icon, {
+        scale: [1, 1.07, 1],
+        opacity: [0.88, 1, 0.88],
+        duration: 2600,
+        loop: true,
+        ease: 'inOutSine',
       });
     }
   }
@@ -117,5 +133,6 @@ export class MenuPage implements AfterViewInit, OnDestroy {
     // Clicking the button navigates away without ever firing mouseleave —
     // make sure the wave background doesn't stay stuck in its hover state.
     this.ambiance.heroHover.set(false);
+    this.breathingAnimation?.pause();
   }
 }

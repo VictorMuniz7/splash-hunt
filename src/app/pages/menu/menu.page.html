@@ -31,6 +31,7 @@
       <button
         type="button"
         class="relative flex h-36 w-36 cursor-pointer items-center justify-center rounded-full border-2 border-splash-gold/40 bg-gradient-to-br from-[#2a0940] to-[#0c0116] transition-transform hover:scale-[1.03] sm:h-48 sm:w-48"
+        [attr.aria-label]="i18n.t('menu.startButton')"
         (mouseenter)="onStartHover($event)"
         (mouseleave)="onStartLeave($event)"
         (click)="onStart()"
@@ -39,11 +40,27 @@
           class="start-glow pointer-events-none absolute -inset-4 rounded-full bg-splash-magenta/20 opacity-0 blur-2xl"
         ></span>
 
-        <span
-          class="title-font relative z-10 px-6 text-center text-base leading-snug text-[#f4e9d8] sm:text-lg"
+        <svg
+          #playIcon
+          viewBox="0 0 100 100"
+          class="relative z-10 h-14 w-14 sm:h-16 sm:w-16"
+          aria-hidden="true"
         >
-          {{ i18n.t('menu.startButton') }}
-        </span>
+          <path
+            d="M27 15 Q22 50 27 85 Q59 67 88 50 Q59 33 27 15 Z"
+            fill="none"
+            stroke="rgba(201, 169, 89, 0.35)"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M33 23 Q29 50 33 77 Q56 64 79 50 Q56 36 33 23 Z"
+            fill="#0c0116"
+            stroke="#c9a959"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        </svg>
       </button>
       <span class="text-xs uppercase tracking-[0.35em] text-splash-gold/80 sm:text-sm">{{
         i18n.t('menu.startLabel')
