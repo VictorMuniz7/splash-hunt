@@ -163,13 +163,12 @@
         <ul
           class="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-xl border border-splash-gold/15 bg-black/25 p-3 lg:max-h-[28rem]"
         >
-          @for (attempt of currentRoundAttempts(); track attempt.id) {
+          @for (attempt of myRoundAttempts(); track attempt.id) {
             <li
               class="hex-banner flex items-center justify-between gap-2 px-5 py-2 text-sm"
               [class]="attempt.gaveUp ? 'hex-banner--lose text-[#cbb9d6]/70' : attempt.correct ? 'hex-banner--win text-emerald-200' : 'hex-banner--lose text-[#f0d7de]'"
             >
-              <span class="truncate">
-                <span class="text-xs text-[#cbb9d6]/60">{{ playerLabel(attempt) }}:</span>
+              <span>
                 @if (attempt.gaveUp) {
                   {{ i18n.t('match.gaveUpTag') }}
                 } @else {

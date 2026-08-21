@@ -22,7 +22,7 @@
       >
         {{ i18n.t('mp.play') }}
       </button>
-    } @else if (enteringNickname()) {
+    } @else {
       <div class="flex w-full max-w-sm flex-col items-center gap-3 sm:flex-row">
         <input
           type="text"
@@ -30,7 +30,7 @@
           [placeholder]="i18n.t('mp.nicknamePlaceholder')"
           [value]="nickname()"
           (input)="nickname.set($any($event.target).value)"
-          (keydown.enter)="confirmAnonymous()"
+          (keydown.enter)="confirmNickname()"
           maxlength="24"
           autofocus
         />
@@ -38,7 +38,7 @@
           type="button"
           class="w-full shrink-0 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30 sm:w-auto"
           [disabled]="!nickname().trim() || submitting()"
-          (click)="confirmAnonymous()"
+          (click)="confirmNickname()"
         >
           {{ i18n.t('mp.confirm') }}
         </button>
@@ -46,21 +46,6 @@
       @if (error(); as err) {
         <p class="text-xs text-splash-wine">{{ err }}</p>
       }
-    } @else {
-      <button
-        type="button"
-        class="w-64 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30"
-        (click)="goToAuth()"
-      >
-        {{ i18n.t('mp.loginRegister') }}
-      </button>
-      <button
-        type="button"
-        class="w-64 cursor-pointer rounded-lg border border-splash-gold/30 bg-black/30 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#cbb9d6]/90 transition hover:border-splash-gold/60"
-        (click)="startAnonymous()"
-      >
-        {{ i18n.t('mp.playAnonymous') }}
-      </button>
     }
   </div>
 </section>

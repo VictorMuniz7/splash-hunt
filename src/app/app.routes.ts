@@ -25,11 +25,6 @@ export const routes: Routes = [
           import('./pages/multiplayer/multiplayer-menu.page').then((m) => m.MultiplayerMenuPage),
       },
       {
-        path: 'entrar',
-        loadComponent: () =>
-          import('./pages/multiplayer/auth/login-register.page').then((m) => m.LoginRegisterPage),
-      },
-      {
         path: 'salas',
         canActivate: [requireSessionGuard],
         children: [

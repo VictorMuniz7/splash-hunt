@@ -8,14 +8,14 @@ export interface AuthResult {
 }
 
 const AUTH_ERROR_KEYS: Record<string, TranslationKey> = {
-  email_not_confirmed: 'auth.errorEmailNotConfirmed',
-  invalid_credentials: 'auth.errorInvalidCredentials',
-  user_already_exists: 'auth.errorUserExists',
-  email_exists: 'auth.errorUserExists',
-  weak_password: 'auth.errorWeakPassword',
-  email_address_invalid: 'auth.errorInvalidEmail',
-  validation_failed: 'auth.errorInvalidEmail',
   anonymous_provider_disabled: 'auth.errorAnonymousDisabled',
+  // The nickname-uniqueness check (profiles.nickname) is enforced by the
+  // handle_new_user trigger, not by Supabase Auth itself — a collision there
+  // surfaces as this generic code. Nothing else in that trigger can fail, so
+  // mapping it straight to "nickname taken" is accurate for this flow (the
+  // common case is caught earlier by isNicknameTaken's pre-check; this is
+  // just the race-condition fallback for two players claiming it at once).
+  unexpected_failure: 'mp.errorNicknameTaken',
 };
 
 /** Maps a Supabase AuthError (always English) to a translation key so the UI
@@ -37,9 +37,9 @@ export class SupabaseService {
   readonly isLoggedIn = () => this.session() !== null && !this.session()?.user.is_anonymous;
   readonly isAnonymous = () => this.session()?.user.is_anonymous === true;
 
-  /** The nickname passed at signup/anonymous sign-in — available immediately,
-   * before the `profiles` row (source of truth, kept in sync by ProfileService)
-   * has had a chance to load. */
+  /** The nickname passed at sign-in — available immediately, before the
+   * `profiles` row (source of truth, kept in sync by ProfileService) has had
+   * a chance to load. */
   readonly sessionNickname = (): string | null => {
     const metadata = this.session()?.user.user_metadata;
     const nickname = metadata?.['nickname'];
@@ -53,25 +53,17 @@ export class SupabaseService {
     });
   }
 
-  async signUp(email: string, password: string, nickname: string): Promise<AuthResult> {
-    const { error } = await this.client.auth.signUp({
-      email,
-      password,
-      options: { data: { nickname } },
-    });
-    return { error };
-  }
-
-  async signInWithPassword(email: string, password: string): Promise<AuthResult> {
-    const { error } = await this.client.auth.signInWithPassword({ email, password });
-    return { error };
-  }
-
   async signInAnonymously(nickname: string): Promise<AuthResult> {
     const { error } = await this.client.auth.signInAnonymously({
       options: { data: { nickname, is_anonymous: true } },
     });
     return { error };
+  }
+
+  /** Pre-check so a taken nickname is caught before even attempting sign-in. */
+  async isNicknameTaken(nickname: string): Promise<boolean> {
+    const { data } = await this.client.from('profiles').select('id').eq('nickname', nickname).maybeSingle();
+    return !!data;
   }
 
   async signOut(): Promise<void> {

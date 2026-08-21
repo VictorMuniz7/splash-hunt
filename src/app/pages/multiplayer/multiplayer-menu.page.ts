@@ -13,7 +13,6 @@ export class MultiplayerMenuPage implements AfterViewInit {
   protected readonly supabase = inject(SupabaseService);
   private readonly router = inject(Router);
 
-  readonly enteringNickname = signal(false);
   readonly nickname = signal('');
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -32,25 +31,24 @@ export class MultiplayerMenuPage implements AfterViewInit {
     }
   }
 
-  goToAuth(): void {
-    this.router.navigateByUrl('/multiplayer/entrar');
-  }
-
   goToRooms(): void {
     this.router.navigateByUrl('/multiplayer/salas');
   }
 
-  startAnonymous(): void {
-    this.enteringNickname.set(true);
-  }
-
-  async confirmAnonymous(): Promise<void> {
+  async confirmNickname(): Promise<void> {
     const value = this.nickname().trim();
     if (!value) {
       return;
     }
     this.submitting.set(true);
     this.error.set(null);
+
+    if (await this.supabase.isNicknameTaken(value)) {
+      this.submitting.set(false);
+      this.error.set(this.i18n.t('mp.errorNicknameTaken'));
+      return;
+    }
+
     const { error } = await this.supabase.signInAnonymously(value);
     this.submitting.set(false);
     if (error) {

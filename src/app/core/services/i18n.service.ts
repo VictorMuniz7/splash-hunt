@@ -33,9 +33,8 @@ export type TranslationKey =
   | 'language.switchTo'
   | 'flag.multiplayer'
   | 'flag.solo'
-  | 'profile.loginPrompt'
-  | 'profile.anonymousPrompt'
-  | 'profile.loginCta'
+  | 'profile.playingAs'
+  | 'profile.noSessionPrompt'
   | 'profile.changePhoto'
   | 'profile.signOut'
   | 'profile.mode.padrao'
@@ -44,34 +43,13 @@ export type TranslationKey =
   | 'profile.mode.anomaly'
   | 'mp.subtitle'
   | 'mp.description'
-  | 'mp.loginRegister'
-  | 'mp.playAnonymous'
   | 'mp.nicknamePlaceholder'
   | 'mp.confirm'
   | 'mp.greeting'
   | 'mp.play'
-  | 'auth.loginTab'
-  | 'auth.registerTab'
-  | 'auth.nickname'
-  | 'auth.email'
-  | 'auth.password'
-  | 'auth.confirmPassword'
-  | 'auth.submitLogin'
-  | 'auth.submitRegister'
-  | 'auth.confirmEmailSent'
-  | 'auth.passwordMismatch'
+  | 'mp.errorNicknameTaken'
   | 'auth.genericError'
-  | 'auth.reqLength'
-  | 'auth.reqUpper'
-  | 'auth.reqLower'
-  | 'auth.reqNumber'
-  | 'auth.reqSymbol'
   | 'auth.backToMultiplayer'
-  | 'auth.errorEmailNotConfirmed'
-  | 'auth.errorInvalidCredentials'
-  | 'auth.errorUserExists'
-  | 'auth.errorWeakPassword'
-  | 'auth.errorInvalidEmail'
   | 'auth.errorAnonymousDisabled'
   | 'rooms.comingSoon'
   | 'rooms.createTitle'
@@ -153,11 +131,10 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'language.switchTo': 'EN',
     'flag.multiplayer': 'Multi​player',
     'flag.solo': 'Solo',
-    'profile.loginPrompt': 'Entre para ter um perfil com foto e estatísticas.',
-    'profile.anonymousPrompt': 'Contas anônimas não têm perfil. Crie uma conta para ter foto e estatísticas.',
-    'profile.loginCta': 'Entrar / Cadastrar',
+    'profile.playingAs': 'Jogando como',
+    'profile.noSessionPrompt': 'Escolha um nickname na tela de multiplayer para jogar.',
     'profile.changePhoto': 'Trocar foto',
-    'profile.signOut': 'Sair da conta',
+    'profile.signOut': 'Sair',
     'profile.mode.padrao': 'Padrão',
     'profile.mode.vulto': 'Vulto',
     'profile.mode.pretoEBranco': 'Preto e Branco',
@@ -165,34 +142,13 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'mp.subtitle': 'Multiplayer',
     'mp.description':
       'Desafie um amigo ou encontre um adversário: os dois veem a mesma splash art ao mesmo tempo, em 5 rodadas — quem adivinhar primeiro pontua mais. No fim, quem somar mais pontos vence.',
-    'mp.loginRegister': 'Entrar / Cadastrar',
-    'mp.playAnonymous': 'Jogar como anônimo',
     'mp.nicknamePlaceholder': 'Seu nickname…',
     'mp.confirm': 'Confirmar',
     'mp.greeting': 'Olá,',
     'mp.play': 'Jogar',
-    'auth.loginTab': 'Entrar',
-    'auth.registerTab': 'Cadastrar',
-    'auth.nickname': 'Nickname',
-    'auth.email': 'E-mail',
-    'auth.password': 'Senha',
-    'auth.confirmPassword': 'Confirmar senha',
-    'auth.submitLogin': 'Entrar',
-    'auth.submitRegister': 'Cadastrar',
-    'auth.confirmEmailSent': 'Conta criada! Confira seu e-mail para confirmar antes de entrar.',
-    'auth.passwordMismatch': 'As senhas não coincidem.',
+    'mp.errorNicknameTaken': 'Esse nickname já está em uso. Escolha outro.',
     'auth.genericError': 'Algo deu errado. Tente novamente.',
-    'auth.reqLength': 'Pelo menos 8 caracteres',
-    'auth.reqUpper': 'Uma letra maiúscula',
-    'auth.reqLower': 'Uma letra minúscula',
-    'auth.reqNumber': 'Um número',
-    'auth.reqSymbol': 'Um símbolo',
     'auth.backToMultiplayer': 'Voltar',
-    'auth.errorEmailNotConfirmed': 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada (e o spam).',
-    'auth.errorInvalidCredentials': 'E-mail ou senha incorretos.',
-    'auth.errorUserExists': 'Já existe uma conta com esse e-mail.',
-    'auth.errorWeakPassword': 'Senha muito fraca. Siga os requisitos acima.',
-    'auth.errorInvalidEmail': 'Esse endereço de e-mail não é válido.',
     'auth.errorAnonymousDisabled': 'O modo anônimo está temporariamente indisponível.',
     'rooms.comingSoon': 'Criar ou entrar em uma sala chega na próxima fase.',
     'rooms.createTitle': 'Criar sala',
@@ -273,9 +229,8 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'language.switchTo': 'PT-BR',
     'flag.multiplayer': 'Multi​player',
     'flag.solo': 'Solo',
-    'profile.loginPrompt': 'Log in to have a profile with a photo and stats.',
-    'profile.anonymousPrompt': "Guest accounts don't have a profile. Create an account for a photo and stats.",
-    'profile.loginCta': 'Log in / Sign up',
+    'profile.playingAs': 'Playing as',
+    'profile.noSessionPrompt': 'Choose a nickname on the multiplayer screen to play.',
     'profile.changePhoto': 'Change photo',
     'profile.signOut': 'Sign out',
     'profile.mode.padrao': 'Standard',
@@ -285,34 +240,13 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'mp.subtitle': 'Multiplayer',
     'mp.description':
       "Challenge a friend or find an opponent: you both see the same splash art at the same time, across 5 rounds — the faster guess scores more. Whoever has the most points at the end wins.",
-    'mp.loginRegister': 'Log in / Sign up',
-    'mp.playAnonymous': 'Play as a guest',
     'mp.nicknamePlaceholder': 'Your nickname…',
     'mp.confirm': 'Confirm',
     'mp.greeting': 'Hi,',
     'mp.play': 'Play',
-    'auth.loginTab': 'Log in',
-    'auth.registerTab': 'Sign up',
-    'auth.nickname': 'Nickname',
-    'auth.email': 'Email',
-    'auth.password': 'Password',
-    'auth.confirmPassword': 'Confirm password',
-    'auth.submitLogin': 'Log in',
-    'auth.submitRegister': 'Sign up',
-    'auth.confirmEmailSent': 'Account created! Check your email to confirm it before logging in.',
-    'auth.passwordMismatch': "Passwords don't match.",
+    'mp.errorNicknameTaken': "That nickname is already taken. Choose another.",
     'auth.genericError': 'Something went wrong. Please try again.',
-    'auth.reqLength': 'At least 8 characters',
-    'auth.reqUpper': 'One uppercase letter',
-    'auth.reqLower': 'One lowercase letter',
-    'auth.reqNumber': 'One number',
-    'auth.reqSymbol': 'One symbol',
     'auth.backToMultiplayer': 'Back',
-    'auth.errorEmailNotConfirmed': 'Confirm your email before logging in. Check your inbox (and spam folder).',
-    'auth.errorInvalidCredentials': 'Incorrect email or password.',
-    'auth.errorUserExists': 'An account with this email already exists.',
-    'auth.errorWeakPassword': 'Password too weak. Follow the requirements above.',
-    'auth.errorInvalidEmail': "That email address isn't valid.",
     'auth.errorAnonymousDisabled': 'Anonymous mode is temporarily unavailable.',
     'rooms.comingSoon': 'Creating or joining a room lands in the next phase.',
     'rooms.createTitle': 'Create a room',

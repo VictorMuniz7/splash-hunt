@@ -1,5 +1,4 @@
 import { Component, ElementRef, inject, output, signal, viewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { GAME_MODES } from '../../../core/models/room.model';
 import { I18nService } from '../../../core/services/i18n.service';
 import { ProfileService } from '../../../core/services/profile.service';
@@ -7,7 +6,6 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-profile-panel',
-  imports: [RouterLink],
   templateUrl: './profile-panel.html',
 })
 export class ProfilePanel {

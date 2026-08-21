@@ -15,7 +15,6 @@ import {
 } from '../../../core/config/game.config';
 import { GameMode } from '../../../core/models/game.model';
 import { MatchRound, MatchWithProfiles, RoundAttempt } from '../../../core/models/match.model';
-import { RoomPlayer } from '../../../core/models/room.model';
 import { DataDragonService } from '../../../core/services/data-dragon.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { matchErrorKey, MatchService } from '../../../core/services/match.service';
@@ -94,19 +93,24 @@ export class MatchPage implements OnInit, OnDestroy {
   });
   private readonly currentRoundId = computed(() => this.currentRound()?.id ?? null);
 
-  readonly currentRoundAttempts = computed(() => {
+  /**
+   * Only MY OWN attempts this round — each player's guesses (and the zoom
+   * reveal they earn from wrong ones) are private, not shared with the
+   * opponent, so this is scoped by profileId rather than just roundId.
+   */
+  readonly myRoundAttempts = computed(() => {
     const roundId = this.currentRoundId();
-    return roundId ? this.attempts().filter((a) => a.roundId === roundId) : [];
+    const myId = this.supabase.session()?.user.id;
+    return roundId ? this.attempts().filter((a) => a.roundId === roundId && a.profileId === myId) : [];
   });
   private readonly wrongAttemptCount = computed(
-    () => this.currentRoundAttempts().filter((a) => !a.correct && !a.gaveUp).length,
+    () => this.myRoundAttempts().filter((a) => !a.correct && !a.gaveUp).length,
   );
   /** championId_skinNum keys this player already guessed wrong this round — excluded from the skin selector. */
   readonly excludedSkins = computed(() => {
-    const myId = this.supabase.session()?.user.id;
     return new Set(
-      this.currentRoundAttempts()
-        .filter((a) => a.profileId === myId && !a.correct && !a.gaveUp)
+      this.myRoundAttempts()
+        .filter((a) => !a.correct && !a.gaveUp)
         .map((a) => `${a.championId}_${a.skinNum}`),
     );
   });
@@ -213,7 +217,11 @@ export class MatchPage implements OnInit, OnDestroy {
       this.scheduleNextRound(match.id, isFirstRound ? 0 : MULTIPLAYER_NEXT_ROUND_DELAY_MS);
     });
 
-    // Vulto: flash the splash for VULTO_REVEAL_MS then hide it, once per round.
+    // Runs once per round transition: clears any in-progress guess left over
+    // from a round that ended without me answering (e.g. the opponent scored
+    // first in Vulto) — otherwise it silently carries into the new round's
+    // combobox. Also, for Vulto, flashes the splash for VULTO_REVEAL_MS then
+    // hides it.
     effect(() => {
       const roundId = this.currentRoundId();
       const isVulto = this.isVultoMode();
@@ -222,6 +230,7 @@ export class MatchPage implements OnInit, OnDestroy {
         return;
       }
       this.roundStartedForId = roundId;
+      this.selectedChampion.set(null);
       if (this.vultoRevealHandle) {
         clearTimeout(this.vultoRevealHandle);
       }
@@ -391,15 +400,6 @@ export class MatchPage implements OnInit, OnDestroy {
 
   cancelGiveUp(): void {
     this.confirmingGiveUp.set(false);
-  }
-
-  playerLabel(attempt: RoundAttempt): string {
-    const match = this.match();
-    if (!match) {
-      return '';
-    }
-    const player: RoomPlayer = attempt.profileId === match.hostId ? match.host : match.guest;
-    return player.nickname;
   }
 
   backToRoom(): void {

@@ -104,8 +104,8 @@
       appWinnerReveal
       class="flex flex-col items-center gap-4 rounded-2xl border-2 border-splash-gold/50 bg-black/40 px-8 py-6 shadow-2xl shadow-splash-gold/10"
     >
-      <div class="flex items-center gap-8 sm:gap-14">
-        <div class="flex flex-col items-center gap-2">
+      <div class="flex items-center gap-4 sm:gap-8">
+        <div class="flex w-28 flex-col items-center gap-2 sm:w-36">
           <div
             class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-black/40 sm:h-20 sm:w-20"
             [class]="
@@ -122,11 +122,13 @@
               }}</span>
             }
           </div>
-          <p class="text-base font-semibold text-[#f4e9d8] sm:text-lg">{{ match().host.nickname }}</p>
+          <p class="w-full truncate text-center text-base font-semibold text-[#f4e9d8] sm:text-lg">
+            {{ match().host.nickname }}
+          </p>
           <p class="title-font text-5xl text-splash-gold sm:text-6xl">{{ match().hostScore }}</p>
         </div>
-        <span class="text-lg text-splash-gold/40">×</span>
-        <div class="flex flex-col items-center gap-2">
+        <span class="shrink-0 text-lg text-splash-gold/40">×</span>
+        <div class="flex w-28 flex-col items-center gap-2 sm:w-36">
           <div
             class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-black/40 sm:h-20 sm:w-20"
             [class]="
@@ -143,7 +145,9 @@
               }}</span>
             }
           </div>
-          <p class="text-base font-semibold text-[#f4e9d8] sm:text-lg">{{ match().guest.nickname }}</p>
+          <p class="w-full truncate text-center text-base font-semibold text-[#f4e9d8] sm:text-lg">
+            {{ match().guest.nickname }}
+          </p>
           <p class="title-font text-5xl text-splash-gold sm:text-6xl">{{ match().guestScore }}</p>
         </div>
       </div>
