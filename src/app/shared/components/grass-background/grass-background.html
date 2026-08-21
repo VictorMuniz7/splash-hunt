@@ -1,0 +1,39 @@
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#0d1a08]">
+  <div
+    class="hero-spotlight pointer-events-none absolute bottom-0 left-1/2 h-72 w-[70vw] -translate-x-1/2 rounded-full bg-[#c9a959]/0 blur-3xl"
+  ></div>
+
+  <svg
+    class="absolute bottom-0 left-0 h-40 w-full sm:h-52"
+    viewBox="0 0 1600 200"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M0,160 L30,120 L55,155 L85,110 L115,150 L150,105 L180,148 L210,115 L245,155 L275,100 L305,145 L340,120 L370,150 L400,108 L430,152 L465,118 L495,145 L525,102 L555,150 L590,122 L620,148 L650,110 L680,155 L715,100 L745,145 L780,120 L810,150 L840,112 L870,148 L905,118 L935,152 L965,105 L995,145 L1030,122 L1060,150 L1090,108 L1120,155 L1155,115 L1185,148 L1215,102 L1245,150 L1280,120 L1310,145 L1340,110 L1370,152 L1405,118 L1435,148 L1465,105 L1495,150 L1530,122 L1560,145 L1600,115 V200 H0 Z"
+      fill="#16260f"
+    />
+  </svg>
+
+  <div class="absolute bottom-0 h-24 w-full sm:h-32">
+    @for (cluster of clusters; track cluster.left) {
+      <div
+        class="grass-cluster absolute bottom-0 h-full"
+        [style.left.%]="cluster.left"
+        [style.width.px]="cluster.width"
+        [style.transform-origin]="'50% 100%'"
+        [attr.data-gust-duration]="cluster.gustDuration"
+        [attr.data-gust-delay]="cluster.gustDelay"
+        [attr.data-gust-angle]="cluster.gustAngle"
+      >
+        <svg viewBox="0 0 40 60" class="h-full w-full" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M8 60 Q3 30 12 0" [attr.stroke]="cluster.colorA" stroke-width="3" fill="none" stroke-linecap="round" />
+          <path d="M20 60 Q23 25 19 -3" [attr.stroke]="cluster.colorB" stroke-width="3.5" fill="none" stroke-linecap="round" />
+          <path d="M32 60 Q37 32 27 2" [attr.stroke]="cluster.colorA" stroke-width="3" fill="none" stroke-linecap="round" />
+        </svg>
+      </div>
+    }
+  </div>
+
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
+</div>

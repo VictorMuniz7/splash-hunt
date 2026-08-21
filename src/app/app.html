@@ -1,4 +1,8 @@
-<app-wave-background />
+@if (theme.mode() === 'multiplayer') {
+  <app-grass-background />
+} @else {
+  <app-wave-background />
+}
 <div class="relative z-10 flex min-h-screen flex-col">
   <app-header />
   <main class="flex flex-1 flex-col">

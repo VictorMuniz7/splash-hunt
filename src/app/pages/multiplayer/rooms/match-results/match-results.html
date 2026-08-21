@@ -1,0 +1,190 @@
+<section class="flex flex-1 flex-col items-center gap-6 px-4 py-8 sm:py-10">
+  <h2 class="title-font text-xl text-splash-gold sm:text-2xl">{{ i18n.t('match.resultsTitle') }}</h2>
+
+  <div class="flex w-full max-w-2xl flex-col gap-4">
+    @for (round of visibleRounds(); track round.id) {
+      <div
+        #roundCard
+        appEnterAnimate
+        class="relative overflow-hidden rounded-2xl border-2 border-splash-gold/25 bg-black/40 shadow-xl shadow-black/50"
+      >
+        <div
+          class="relative aspect-[16/9] w-full bg-cover bg-center"
+          [style.background-image]="'url(' + round.splashUrl + ')'"
+        >
+          <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"></div>
+
+          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 px-32 text-center sm:px-48">
+            <p class="title-font text-base text-[#f4e9d8] [text-shadow:0_2px_8px_rgba(0,0,0,0.9)] sm:text-xl">
+              {{ round.championName }}
+            </p>
+            <p class="text-xs text-[#cbb9d6]/90 [text-shadow:0_2px_8px_rgba(0,0,0,0.9)]">{{ round.skinLabel }}</p>
+          </div>
+
+          <div
+            class="absolute inset-y-0 left-0 flex w-24 flex-col items-center justify-center gap-1 bg-gradient-to-r from-splash-bg-deep via-splash-bg-deep/85 to-transparent px-1.5 sm:w-40"
+          >
+            <div class="relative">
+              @if (isRoundWinner(round, 'host')) {
+                <svg
+                  viewBox="0 0 24 24"
+                  class="absolute -top-5 left-1/2 h-5 w-5 -translate-x-1/2 text-splash-gold drop-shadow-[0_0_4px_rgba(201,169,89,0.9)] sm:h-6 sm:w-6"
+                  fill="currentColor"
+                >
+                  <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8z" />
+                </svg>
+              }
+              <div
+                class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-black/40 transition sm:h-16 sm:w-16"
+                [class]="avatarRingClass(round, 'host')"
+              >
+                @if (match().host.avatarUrl; as url) {
+                  <img [src]="url" alt="" class="h-full w-full object-cover" />
+                } @else {
+                  <span class="text-xl font-semibold text-splash-gold sm:text-2xl">{{
+                    match().host.nickname.charAt(0).toUpperCase()
+                  }}</span>
+                }
+              </div>
+            </div>
+            <p class="w-full truncate text-center text-sm font-semibold text-[#f4e9d8] sm:text-base">
+              {{ match().host.nickname }}
+            </p>
+            <p [class]="pointsClass(round, 'host')">+{{ round.hostPoints }}</p>
+            @if (outcomeTag(outcomeFor(round, match().hostId)); as tag) {
+              <span class="text-[10px]" [class]="outcomeClass(outcomeFor(round, match().hostId))">{{ tag }}</span>
+            }
+          </div>
+
+          <div
+            class="absolute inset-y-0 right-0 flex w-24 flex-col items-center justify-center gap-1 bg-gradient-to-l from-splash-bg-deep via-splash-bg-deep/85 to-transparent px-1.5 sm:w-40"
+          >
+            <div class="relative">
+              @if (isRoundWinner(round, 'guest')) {
+                <svg
+                  viewBox="0 0 24 24"
+                  class="absolute -top-5 left-1/2 h-5 w-5 -translate-x-1/2 text-splash-gold drop-shadow-[0_0_4px_rgba(201,169,89,0.9)] sm:h-6 sm:w-6"
+                  fill="currentColor"
+                >
+                  <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8z" />
+                </svg>
+              }
+              <div
+                class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-black/40 transition sm:h-16 sm:w-16"
+                [class]="avatarRingClass(round, 'guest')"
+              >
+                @if (match().guest.avatarUrl; as url) {
+                  <img [src]="url" alt="" class="h-full w-full object-cover" />
+                } @else {
+                  <span class="text-xl font-semibold text-splash-gold sm:text-2xl">{{
+                    match().guest.nickname.charAt(0).toUpperCase()
+                  }}</span>
+                }
+              </div>
+            </div>
+            <p class="w-full truncate text-center text-sm font-semibold text-[#f4e9d8] sm:text-base">
+              {{ match().guest.nickname }}
+            </p>
+            <p [class]="pointsClass(round, 'guest')">+{{ round.guestPoints }}</p>
+            @if (outcomeTag(outcomeFor(round, match().guestId)); as tag) {
+              <span class="text-[10px]" [class]="outcomeClass(outcomeFor(round, match().guestId))">{{ tag }}</span>
+            }
+          </div>
+        </div>
+        <p class="py-1 text-center text-[10px] uppercase tracking-widest text-[#cbb9d6]/50">
+          {{ i18n.t('match.roundLabel') }} {{ round.roundNumber }}
+        </p>
+      </div>
+    }
+  </div>
+
+  @if (showWinner()) {
+    <div
+      #winnerSection
+      appWinnerReveal
+      class="flex flex-col items-center gap-4 rounded-2xl border-2 border-splash-gold/50 bg-black/40 px-8 py-6 shadow-2xl shadow-splash-gold/10"
+    >
+      <div class="flex items-center gap-8 sm:gap-14">
+        <div class="flex flex-col items-center gap-2">
+          <div
+            class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-black/40 sm:h-20 sm:w-20"
+            [class]="
+              match().winnerId === match().hostId
+                ? 'border-[3px] border-splash-gold shadow-[0_0_16px_5px_rgba(201,169,89,0.7)]'
+                : 'border-2 border-splash-gold/30'
+            "
+          >
+            @if (match().host.avatarUrl; as url) {
+              <img [src]="url" alt="" class="h-full w-full object-cover" />
+            } @else {
+              <span class="text-2xl font-semibold text-splash-gold sm:text-3xl">{{
+                match().host.nickname.charAt(0).toUpperCase()
+              }}</span>
+            }
+          </div>
+          <p class="text-base font-semibold text-[#f4e9d8] sm:text-lg">{{ match().host.nickname }}</p>
+          <p class="title-font text-5xl text-splash-gold sm:text-6xl">{{ match().hostScore }}</p>
+        </div>
+        <span class="text-lg text-splash-gold/40">×</span>
+        <div class="flex flex-col items-center gap-2">
+          <div
+            class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-black/40 sm:h-20 sm:w-20"
+            [class]="
+              match().winnerId === match().guestId
+                ? 'border-[3px] border-splash-gold shadow-[0_0_16px_5px_rgba(201,169,89,0.7)]'
+                : 'border-2 border-splash-gold/30'
+            "
+          >
+            @if (match().guest.avatarUrl; as url) {
+              <img [src]="url" alt="" class="h-full w-full object-cover" />
+            } @else {
+              <span class="text-2xl font-semibold text-splash-gold sm:text-3xl">{{
+                match().guest.nickname.charAt(0).toUpperCase()
+              }}</span>
+            }
+          </div>
+          <p class="text-base font-semibold text-[#f4e9d8] sm:text-lg">{{ match().guest.nickname }}</p>
+          <p class="title-font text-5xl text-splash-gold sm:text-6xl">{{ match().guestScore }}</p>
+        </div>
+      </div>
+
+      @if (match().winnerId; as winnerId) {
+        <p class="text-sm text-[#cbb9d6]/80">
+          {{ i18n.t('match.winnerLabel') }}:
+          <span class="font-semibold text-splash-gold">{{
+            winnerId === match().hostId ? match().host.nickname : match().guest.nickname
+          }}</span>
+        </p>
+      } @else {
+        <p class="text-sm font-semibold text-splash-gold">{{ i18n.t('match.tieLabel') }}</p>
+      }
+
+      <div class="flex flex-col items-center gap-3">
+        @if (isHost()) {
+          <button
+            type="button"
+            class="w-56 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30"
+            (click)="playAgain.emit()"
+          >
+            {{ i18n.t('match.playAgain') }}
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="w-56 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30"
+            (click)="backToRoom.emit()"
+          >
+            {{ i18n.t('match.backToRoom') }}
+          </button>
+        }
+        <button
+          type="button"
+          class="cursor-pointer rounded-lg border border-splash-wine/40 px-4 py-2 text-xs uppercase tracking-widest text-[#f0d7de] transition hover:bg-splash-wine/10"
+          (click)="leave.emit()"
+        >
+          {{ i18n.t('rooms.leaveRoom') }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

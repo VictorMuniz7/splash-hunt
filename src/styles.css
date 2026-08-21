@@ -36,6 +36,20 @@
   --color-splash-wine: #8b1e3f;
 }
 
+/*
+ * Multiplayer palette: overrides the same tokens (not new ones), so every
+ * existing utility class (bg-splash-bg, text-splash-gold, .hex-banner, etc.)
+ * re-themes automatically with zero changes to solo-mode components. Gold
+ * and wine stay put — ornaments and error/loss states read fine in both.
+ * Set on <html> by ThemeService, not a template wrapper — see its comment.
+ */
+[data-theme='multiplayer'] {
+  --color-splash-bg: #16260f;
+  --color-splash-bg-deep: #0d1a08;
+  --color-splash-purple: #3f6b2f;
+  --color-splash-magenta: #4f7a3a;
+}
+
 @layer base {
   html,
   body {
@@ -81,6 +95,25 @@
 .hex-banner--lose {
   border-color: var(--color-splash-wine);
   filter: drop-shadow(0 0 3px rgba(139, 30, 63, 0.55));
+}
+
+/*
+ * Pennant/ribbon flag — rectangle with a single V-notch cut into the bottom
+ * edge. Used for the Solo <-> Multiplayer switch. The crisp gold outline
+ * (including the diagonal V-notch edges, which a CSS `border` can't follow
+ * once clip-path cuts them) is drawn by an SVG polygon overlay in the
+ * component template; this just clips the shape and adds a soft glow.
+ *
+ * This element only handles the visual shape (clip-path restricts hit
+ * testing to the clipped silhouette, which would make the tapered bottom
+ * corners of the pennant unclickable) — it sits behind the real click
+ * target, an unclipped full-rectangle <button> in the component template.
+ * Positioning comes from the `absolute` utility class alongside this one,
+ * not from here, so there's no conflicting `position` declaration.
+ */
+.mode-flag {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 50% 100%, 0% 65%);
+  filter: drop-shadow(0 0 4px rgba(201, 169, 89, 0.5));
 }
 
 ::-webkit-scrollbar {

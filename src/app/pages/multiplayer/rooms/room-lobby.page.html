@@ -1,0 +1,101 @@
+<section class="relative z-10 flex flex-1 flex-col items-center gap-8 px-4 py-8 sm:py-10">
+  @if (loading()) {
+    <p class="mt-16 text-sm text-[#cbb9d6]/70">…</p>
+  } @else if (room(); as r) {
+    <div class="mt-10 flex flex-col items-center gap-1">
+      <p class="text-xs uppercase tracking-wide text-[#cbb9d6]/60">{{ i18n.t('rooms.lobbyCodeLabel') }}</p>
+      <div class="flex items-center gap-3">
+        <span class="title-font text-3xl tracking-[0.3em] text-splash-gold sm:text-4xl">{{ r.code }}</span>
+        <button
+          type="button"
+          class="cursor-pointer rounded-lg border border-splash-gold/30 bg-black/30 px-2.5 py-1 text-xs uppercase tracking-widest text-splash-gold/90 transition hover:border-splash-gold/60 hover:bg-black/50"
+          (click)="copyCode()"
+        >
+          {{ copied() ? i18n.t('rooms.copied') : i18n.t('rooms.copyCode') }}
+        </button>
+      </div>
+      @if (modeLabelKey(); as mk) {
+        <p class="mt-1 text-sm text-[#cbb9d6]/80">{{ i18n.t(mk) }}</p>
+      }
+    </div>
+
+    <div class="flex w-full max-w-2xl items-start justify-center gap-6 sm:gap-16">
+      <div class="flex flex-1 flex-col items-center gap-4">
+        <div
+          class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border-2 border-splash-gold/40 bg-black/30 sm:h-40 sm:w-40"
+        >
+          @if (r.host.avatarUrl; as url) {
+            <img [src]="url" alt="" class="h-full w-full object-cover" />
+          } @else {
+            <span class="text-4xl font-semibold text-splash-gold sm:text-5xl">{{
+              r.host.nickname.charAt(0).toUpperCase()
+            }}</span>
+          }
+        </div>
+        <p class="text-sm uppercase tracking-wide text-[#cbb9d6]/60">{{ i18n.t('rooms.hostLabel') }}</p>
+        <p class="max-w-full truncate text-center text-lg font-semibold text-[#f4e9d8]">{{ r.host.nickname }}</p>
+      </div>
+
+      <span class="flex h-32 shrink-0 items-center justify-center text-4xl text-splash-gold/40 sm:h-40 sm:text-5xl"
+        >×</span
+      >
+
+      <div class="flex flex-1 flex-col items-center gap-4">
+        @if (r.guest; as g) {
+          <div
+            class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border-2 border-splash-gold/40 bg-black/30 sm:h-40 sm:w-40"
+          >
+            @if (g.avatarUrl; as url) {
+              <img [src]="url" alt="" class="h-full w-full object-cover" />
+            } @else {
+              <span class="text-4xl font-semibold text-splash-gold sm:text-5xl">{{
+                g.nickname.charAt(0).toUpperCase()
+              }}</span>
+            }
+          </div>
+          <p class="text-sm uppercase tracking-wide text-[#cbb9d6]/60">{{ i18n.t('rooms.guestLabel') }}</p>
+          <p class="max-w-full truncate text-center text-lg font-semibold text-[#f4e9d8]">{{ g.nickname }}</p>
+        } @else {
+          <div
+            class="h-32 w-32 animate-pulse rounded-full border-2 border-dashed border-splash-gold/30 sm:h-40 sm:w-40"
+          ></div>
+          <p class="max-w-[10rem] text-center text-sm text-[#cbb9d6]/60">{{ i18n.t('rooms.waitingOpponent') }}</p>
+        }
+      </div>
+    </div>
+
+    @if (error(); as err) {
+      <p class="-mt-4 text-center text-xs text-splash-wine">{{ err }}</p>
+    }
+
+    <div class="flex flex-col items-center gap-3">
+      @if (isHost()) {
+        <button
+          type="button"
+          class="w-56 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30"
+          [disabled]="!r.guest || acting()"
+          (click)="startMatch()"
+        >
+          {{ i18n.t('rooms.startMatch') }}
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer text-xs uppercase tracking-wide text-[#cbb9d6]/70 underline-offset-2 hover:text-splash-wine hover:underline"
+          [disabled]="acting()"
+          (click)="leaveOrCancel()"
+        >
+          {{ i18n.t('rooms.cancelRoom') }}
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="cursor-pointer rounded-lg border border-splash-wine/40 px-4 py-2 text-xs uppercase tracking-widest text-[#f0d7de] transition hover:bg-splash-wine/10"
+          [disabled]="acting()"
+          (click)="leaveOrCancel()"
+        >
+          {{ i18n.t('rooms.leaveRoom') }}
+        </button>
+      }
+    </div>
+  }
+</section>

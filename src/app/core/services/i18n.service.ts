@@ -30,7 +30,93 @@ export type TranslationKey =
   | 'mode.vulto'
   | 'mode.pretoEBranco'
   | 'footer.disclaimer'
-  | 'language.switchTo';
+  | 'language.switchTo'
+  | 'flag.multiplayer'
+  | 'flag.solo'
+  | 'profile.loginPrompt'
+  | 'profile.anonymousPrompt'
+  | 'profile.loginCta'
+  | 'profile.changePhoto'
+  | 'profile.signOut'
+  | 'profile.mode.padrao'
+  | 'profile.mode.vulto'
+  | 'profile.mode.pretoEBranco'
+  | 'profile.mode.anomaly'
+  | 'mp.subtitle'
+  | 'mp.description'
+  | 'mp.loginRegister'
+  | 'mp.playAnonymous'
+  | 'mp.nicknamePlaceholder'
+  | 'mp.confirm'
+  | 'mp.greeting'
+  | 'mp.play'
+  | 'auth.loginTab'
+  | 'auth.registerTab'
+  | 'auth.nickname'
+  | 'auth.email'
+  | 'auth.password'
+  | 'auth.confirmPassword'
+  | 'auth.submitLogin'
+  | 'auth.submitRegister'
+  | 'auth.confirmEmailSent'
+  | 'auth.passwordMismatch'
+  | 'auth.genericError'
+  | 'auth.reqLength'
+  | 'auth.reqUpper'
+  | 'auth.reqLower'
+  | 'auth.reqNumber'
+  | 'auth.reqSymbol'
+  | 'auth.backToMultiplayer'
+  | 'auth.errorEmailNotConfirmed'
+  | 'auth.errorInvalidCredentials'
+  | 'auth.errorUserExists'
+  | 'auth.errorWeakPassword'
+  | 'auth.errorInvalidEmail'
+  | 'auth.errorAnonymousDisabled'
+  | 'rooms.comingSoon'
+  | 'rooms.createTitle'
+  | 'rooms.chooseMode'
+  | 'rooms.createButton'
+  | 'rooms.joinTitle'
+  | 'rooms.codePlaceholder'
+  | 'rooms.joinButton'
+  | 'rooms.lobbyCodeLabel'
+  | 'rooms.copyCode'
+  | 'rooms.copied'
+  | 'rooms.waitingOpponent'
+  | 'rooms.startMatch'
+  | 'rooms.cancelRoom'
+  | 'rooms.leaveRoom'
+  | 'rooms.hostLabel'
+  | 'rooms.guestLabel'
+  | 'rooms.cancelledByHost'
+  | 'rooms.matchStub'
+  | 'rooms.errorNotFound'
+  | 'rooms.errorNotJoinable'
+  | 'rooms.errorOwnRoom'
+  | 'rooms.errorNotStartable'
+  | 'match.giveUp'
+  | 'match.giveUpConfirm'
+  | 'match.waitingOpponentAnswer'
+  | 'match.nextRoundIn'
+  | 'match.finalScore'
+  | 'match.winnerLabel'
+  | 'match.tieLabel'
+  | 'match.backToRoom'
+  | 'match.gaveUpTag'
+  | 'match.roundLabel'
+  | 'match.pointsLabel'
+  | 'match.errorRoundAlreadyActive'
+  | 'match.errorAlreadyAnswered'
+  | 'match.errorRoundNotActive'
+  | 'match.errorMatchComplete'
+  | 'match.errorRoundNotExpired'
+  | 'match.errorNotParticipant'
+  | 'match.errorRoundNotFound'
+  | 'match.playAgain'
+  | 'match.resultsTitle'
+  | 'match.timedOutTag'
+  | 'rooms.errorRematchNotAvailable';
 
 const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
   'pt-BR': {
@@ -65,10 +151,97 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.disclaimer':
       'Splash Hunt não é endossado pela Riot Games e não reflete opiniões da Riot Games ou de qualquer pessoa oficialmente envolvida na produção do League of Legends. League of Legends e Riot Games são marcas registradas da Riot Games, Inc.',
     'language.switchTo': 'EN',
+    'flag.multiplayer': 'Multi​player',
+    'flag.solo': 'Solo',
+    'profile.loginPrompt': 'Entre para ter um perfil com foto e estatísticas.',
+    'profile.anonymousPrompt': 'Contas anônimas não têm perfil. Crie uma conta para ter foto e estatísticas.',
+    'profile.loginCta': 'Entrar / Cadastrar',
+    'profile.changePhoto': 'Trocar foto',
+    'profile.signOut': 'Sair da conta',
+    'profile.mode.padrao': 'Padrão',
+    'profile.mode.vulto': 'Vulto',
+    'profile.mode.pretoEBranco': 'Preto e Branco',
+    'profile.mode.anomaly': 'Anomaly',
+    'mp.subtitle': 'Multiplayer',
+    'mp.description':
+      'Desafie um amigo ou encontre um adversário: os dois veem a mesma splash art ao mesmo tempo, em 5 rodadas — quem adivinhar primeiro pontua mais. No fim, quem somar mais pontos vence.',
+    'mp.loginRegister': 'Entrar / Cadastrar',
+    'mp.playAnonymous': 'Jogar como anônimo',
+    'mp.nicknamePlaceholder': 'Seu nickname…',
+    'mp.confirm': 'Confirmar',
+    'mp.greeting': 'Olá,',
+    'mp.play': 'Jogar',
+    'auth.loginTab': 'Entrar',
+    'auth.registerTab': 'Cadastrar',
+    'auth.nickname': 'Nickname',
+    'auth.email': 'E-mail',
+    'auth.password': 'Senha',
+    'auth.confirmPassword': 'Confirmar senha',
+    'auth.submitLogin': 'Entrar',
+    'auth.submitRegister': 'Cadastrar',
+    'auth.confirmEmailSent': 'Conta criada! Confira seu e-mail para confirmar antes de entrar.',
+    'auth.passwordMismatch': 'As senhas não coincidem.',
+    'auth.genericError': 'Algo deu errado. Tente novamente.',
+    'auth.reqLength': 'Pelo menos 8 caracteres',
+    'auth.reqUpper': 'Uma letra maiúscula',
+    'auth.reqLower': 'Uma letra minúscula',
+    'auth.reqNumber': 'Um número',
+    'auth.reqSymbol': 'Um símbolo',
+    'auth.backToMultiplayer': 'Voltar',
+    'auth.errorEmailNotConfirmed': 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada (e o spam).',
+    'auth.errorInvalidCredentials': 'E-mail ou senha incorretos.',
+    'auth.errorUserExists': 'Já existe uma conta com esse e-mail.',
+    'auth.errorWeakPassword': 'Senha muito fraca. Siga os requisitos acima.',
+    'auth.errorInvalidEmail': 'Esse endereço de e-mail não é válido.',
+    'auth.errorAnonymousDisabled': 'O modo anônimo está temporariamente indisponível.',
+    'rooms.comingSoon': 'Criar ou entrar em uma sala chega na próxima fase.',
+    'rooms.createTitle': 'Criar sala',
+    'rooms.chooseMode': 'Escolha o modo',
+    'rooms.createButton': 'Criar sala',
+    'rooms.joinTitle': 'Entrar com código',
+    'rooms.codePlaceholder': 'Código da sala',
+    'rooms.joinButton': 'Entrar',
+    'rooms.lobbyCodeLabel': 'Código da sala',
+    'rooms.copyCode': 'Copiar',
+    'rooms.copied': 'Copiado!',
+    'rooms.waitingOpponent': 'Aguardando oponente…',
+    'rooms.startMatch': 'Iniciar partida',
+    'rooms.cancelRoom': 'Cancelar sala',
+    'rooms.leaveRoom': 'Sair da sala',
+    'rooms.hostLabel': 'Anfitrião',
+    'rooms.guestLabel': 'Convidado',
+    'rooms.cancelledByHost': 'O anfitrião cancelou a sala.',
+    'rooms.matchStub': 'A partida começa na próxima fase.',
+    'rooms.errorNotFound': 'Sala não encontrada. Confira o código.',
+    'rooms.errorNotJoinable': 'Essa sala já está cheia.',
+    'rooms.errorOwnRoom': 'Você não pode entrar na sua própria sala.',
+    'rooms.errorNotStartable': 'Não é possível iniciar a partida agora.',
+    'match.giveUp': 'Desistir',
+    'match.giveUpConfirm': 'Tem certeza? Você não poderá mais tentar nesta rodada.',
+    'match.waitingOpponentAnswer': 'Aguardando o oponente…',
+    'match.nextRoundIn': 'Próxima rodada em instantes…',
+    'match.finalScore': 'Placar final',
+    'match.winnerLabel': 'Vencedor',
+    'match.tieLabel': 'Empate!',
+    'match.backToRoom': 'Voltar à sala',
+    'match.gaveUpTag': 'Desistiu',
+    'match.roundLabel': 'Rodada',
+    'match.pointsLabel': 'pontos',
+    'match.errorRoundAlreadyActive': 'A rodada já começou.',
+    'match.errorAlreadyAnswered': 'Você já respondeu esta rodada.',
+    'match.errorRoundNotActive': 'Essa rodada já terminou.',
+    'match.errorMatchComplete': 'A partida já terminou.',
+    'match.errorRoundNotExpired': 'O tempo ainda não acabou.',
+    'match.errorNotParticipant': 'Você não faz parte desta partida.',
+    'match.errorRoundNotFound': 'Rodada não encontrada.',
+    'match.playAgain': 'Jogar novamente',
+    'match.resultsTitle': 'Resultado da partida',
+    'match.timedOutTag': 'Tempo esgotado',
+    'rooms.errorRematchNotAvailable': 'Não é possível iniciar uma revanche agora.',
   },
   en: {
     'menu.intro':
-      "A League of Legends champion splash art shows up zoomed into a random spot of the image. Figure out the right champion and skin — every wrong guess reveals a bit more.",
+      'A League of Legends champion splash art shows up zoomed into a random spot of the image. Figure out the right champion and skin — every wrong guess reveals a bit more.',
     'menu.startButton': 'button to start',
     'menu.startLabel': 'start',
     'menu.vultoLabel': 'Shade',
@@ -98,6 +271,93 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.disclaimer':
       'Splash Hunt is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc.',
     'language.switchTo': 'PT-BR',
+    'flag.multiplayer': 'Multi​player',
+    'flag.solo': 'Solo',
+    'profile.loginPrompt': 'Log in to have a profile with a photo and stats.',
+    'profile.anonymousPrompt': "Guest accounts don't have a profile. Create an account for a photo and stats.",
+    'profile.loginCta': 'Log in / Sign up',
+    'profile.changePhoto': 'Change photo',
+    'profile.signOut': 'Sign out',
+    'profile.mode.padrao': 'Standard',
+    'profile.mode.vulto': 'Shade',
+    'profile.mode.pretoEBranco': 'Black & White',
+    'profile.mode.anomaly': 'Anomaly',
+    'mp.subtitle': 'Multiplayer',
+    'mp.description':
+      "Challenge a friend or find an opponent: you both see the same splash art at the same time, across 5 rounds — the faster guess scores more. Whoever has the most points at the end wins.",
+    'mp.loginRegister': 'Log in / Sign up',
+    'mp.playAnonymous': 'Play as a guest',
+    'mp.nicknamePlaceholder': 'Your nickname…',
+    'mp.confirm': 'Confirm',
+    'mp.greeting': 'Hi,',
+    'mp.play': 'Play',
+    'auth.loginTab': 'Log in',
+    'auth.registerTab': 'Sign up',
+    'auth.nickname': 'Nickname',
+    'auth.email': 'Email',
+    'auth.password': 'Password',
+    'auth.confirmPassword': 'Confirm password',
+    'auth.submitLogin': 'Log in',
+    'auth.submitRegister': 'Sign up',
+    'auth.confirmEmailSent': 'Account created! Check your email to confirm it before logging in.',
+    'auth.passwordMismatch': "Passwords don't match.",
+    'auth.genericError': 'Something went wrong. Please try again.',
+    'auth.reqLength': 'At least 8 characters',
+    'auth.reqUpper': 'One uppercase letter',
+    'auth.reqLower': 'One lowercase letter',
+    'auth.reqNumber': 'One number',
+    'auth.reqSymbol': 'One symbol',
+    'auth.backToMultiplayer': 'Back',
+    'auth.errorEmailNotConfirmed': 'Confirm your email before logging in. Check your inbox (and spam folder).',
+    'auth.errorInvalidCredentials': 'Incorrect email or password.',
+    'auth.errorUserExists': 'An account with this email already exists.',
+    'auth.errorWeakPassword': 'Password too weak. Follow the requirements above.',
+    'auth.errorInvalidEmail': "That email address isn't valid.",
+    'auth.errorAnonymousDisabled': 'Anonymous mode is temporarily unavailable.',
+    'rooms.comingSoon': 'Creating or joining a room lands in the next phase.',
+    'rooms.createTitle': 'Create a room',
+    'rooms.chooseMode': 'Choose a mode',
+    'rooms.createButton': 'Create room',
+    'rooms.joinTitle': 'Join with a code',
+    'rooms.codePlaceholder': 'Room code',
+    'rooms.joinButton': 'Join',
+    'rooms.lobbyCodeLabel': 'Room code',
+    'rooms.copyCode': 'Copy',
+    'rooms.copied': 'Copied!',
+    'rooms.waitingOpponent': 'Waiting for opponent…',
+    'rooms.startMatch': 'Start match',
+    'rooms.cancelRoom': 'Cancel room',
+    'rooms.leaveRoom': 'Leave room',
+    'rooms.hostLabel': 'Host',
+    'rooms.guestLabel': 'Guest',
+    'rooms.cancelledByHost': 'The host cancelled the room.',
+    'rooms.matchStub': 'The match starts in the next phase.',
+    'rooms.errorNotFound': 'Room not found. Check the code.',
+    'rooms.errorNotJoinable': "That room is already full.",
+    'rooms.errorOwnRoom': "You can't join your own room.",
+    'rooms.errorNotStartable': "Can't start the match right now.",
+    'match.giveUp': 'Give up',
+    'match.giveUpConfirm': "Are you sure? You won't be able to guess again this round.",
+    'match.waitingOpponentAnswer': 'Waiting for opponent…',
+    'match.nextRoundIn': 'Next round starting soon…',
+    'match.finalScore': 'Final score',
+    'match.winnerLabel': 'Winner',
+    'match.tieLabel': "It's a tie!",
+    'match.backToRoom': 'Back to room',
+    'match.gaveUpTag': 'Gave up',
+    'match.roundLabel': 'Round',
+    'match.pointsLabel': 'points',
+    'match.errorRoundAlreadyActive': 'The round already started.',
+    'match.errorAlreadyAnswered': "You've already answered this round.",
+    'match.errorRoundNotActive': 'This round is already over.',
+    'match.errorMatchComplete': 'The match is already over.',
+    'match.errorRoundNotExpired': "Time isn't up yet.",
+    'match.errorNotParticipant': "You're not part of this match.",
+    'match.errorRoundNotFound': 'Round not found.',
+    'match.playAgain': 'Play again',
+    'match.resultsTitle': 'Match results',
+    'match.timedOutTag': 'Timed out',
+    'rooms.errorRematchNotAvailable': "Can't start a rematch right now.",
   },
 };
 

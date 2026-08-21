@@ -1,0 +1,61 @@
+<section class="relative z-10 flex flex-1 flex-col items-center gap-6 px-4 py-8 sm:py-10">
+  <div class="w-full max-w-sm">
+    <button
+      type="button"
+      class="mb-4 flex cursor-pointer items-center gap-1.5 text-sm text-[#cbb9d6]/80 transition hover:text-splash-gold"
+      [attr.aria-label]="i18n.t('auth.backToMultiplayer')"
+      (click)="back()"
+    >
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="uppercase tracking-wide">{{ i18n.t('auth.backToMultiplayer') }}</span>
+    </button>
+
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-3">
+        <h2 class="title-font text-center text-lg text-[#f4e9d8]">{{ i18n.t('rooms.createTitle') }}</h2>
+        <p class="text-center text-xs uppercase tracking-wide text-[#cbb9d6]/60">{{ i18n.t('rooms.chooseMode') }}</p>
+        <div class="grid grid-cols-2 gap-2">
+          @for (m of modes; track m.key) {
+            <button
+              type="button"
+              class="cursor-pointer rounded-lg border border-splash-gold/25 bg-black/25 px-3 py-3 text-center text-sm font-semibold uppercase tracking-wide text-[#f4e9d8] transition hover:border-splash-gold/60 hover:bg-black/40 disabled:cursor-not-allowed disabled:opacity-30"
+              [disabled]="creating() || joining()"
+              (click)="createRoom(m.key)"
+            >
+              {{ i18n.t(m.labelKey) }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-splash-gold/25 to-transparent"></div>
+
+      <div class="flex flex-col gap-3">
+        <h2 class="title-font text-center text-lg text-[#f4e9d8]">{{ i18n.t('rooms.joinTitle') }}</h2>
+        <form class="flex items-center gap-2" (submit)="$event.preventDefault(); joinRoom()">
+          <input
+            type="text"
+            class="w-full rounded-lg border border-splash-gold/25 bg-black/40 px-4 py-2.5 text-center text-sm uppercase tracking-[0.2em] text-[#f4e9d8] outline-none transition placeholder:tracking-normal placeholder:text-[#cbb9d6]/40 focus:border-splash-magenta/60"
+            [placeholder]="i18n.t('rooms.codePlaceholder')"
+            [value]="code()"
+            maxlength="6"
+            (input)="code.set($any($event.target).value)"
+          />
+          <button
+            type="submit"
+            class="shrink-0 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-5 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30"
+            [disabled]="!code().trim() || creating() || joining()"
+          >
+            {{ i18n.t('rooms.joinButton') }}
+          </button>
+        </form>
+      </div>
+
+      @if (error(); as err) {
+        <p class="text-center text-xs text-splash-wine">{{ err }}</p>
+      }
+    </div>
+  </div>
+</section>
