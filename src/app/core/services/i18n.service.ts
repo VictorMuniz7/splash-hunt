@@ -45,9 +45,6 @@ export type TranslationKey =
   | 'mp.description'
   | 'mp.nicknamePlaceholder'
   | 'mp.confirm'
-  | 'mp.greeting'
-  | 'mp.play'
-  | 'mp.errorNicknameTaken'
   | 'auth.genericError'
   | 'auth.backToMultiplayer'
   | 'auth.errorAnonymousDisabled'
@@ -144,9 +141,6 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'Desafie um amigo ou encontre um adversário: os dois veem a mesma splash art ao mesmo tempo, em 5 rodadas — quem adivinhar primeiro pontua mais. No fim, quem somar mais pontos vence.',
     'mp.nicknamePlaceholder': 'Seu nickname…',
     'mp.confirm': 'Confirmar',
-    'mp.greeting': 'Olá,',
-    'mp.play': 'Jogar',
-    'mp.errorNicknameTaken': 'Esse nickname já está em uso. Escolha outro.',
     'auth.genericError': 'Algo deu errado. Tente novamente.',
     'auth.backToMultiplayer': 'Voltar',
     'auth.errorAnonymousDisabled': 'O modo anônimo está temporariamente indisponível.',
@@ -242,9 +236,6 @@ const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       "Challenge a friend or find an opponent: you both see the same splash art at the same time, across 5 rounds — the faster guess scores more. Whoever has the most points at the end wins.",
     'mp.nicknamePlaceholder': 'Your nickname…',
     'mp.confirm': 'Confirm',
-    'mp.greeting': 'Hi,',
-    'mp.play': 'Play',
-    'mp.errorNicknameTaken': "That nickname is already taken. Choose another.",
     'auth.genericError': 'Something went wrong. Please try again.',
     'auth.backToMultiplayer': 'Back',
     'auth.errorAnonymousDisabled': 'Anonymous mode is temporarily unavailable.',

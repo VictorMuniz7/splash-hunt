@@ -9,14 +9,26 @@ export interface AuthResult {
 
 const AUTH_ERROR_KEYS: Record<string, TranslationKey> = {
   anonymous_provider_disabled: 'auth.errorAnonymousDisabled',
-  // The nickname-uniqueness check (profiles.nickname) is enforced by the
-  // handle_new_user trigger, not by Supabase Auth itself — a collision there
-  // surfaces as this generic code. Nothing else in that trigger can fail, so
-  // mapping it straight to "nickname taken" is accurate for this flow (the
-  // common case is caught earlier by isNicknameTaken's pre-check; this is
-  // just the race-condition fallback for two players claiming it at once).
-  unexpected_failure: 'mp.errorNicknameTaken',
 };
+
+const LAST_NICKNAME_KEY = 'splash-hunt:last-nickname';
+
+/** Last nickname used on this browser, offered back as the input placeholder. */
+export function lastNickname(): string | null {
+  try {
+    return localStorage.getItem(LAST_NICKNAME_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function rememberNickname(nickname: string): void {
+  try {
+    localStorage.setItem(LAST_NICKNAME_KEY, nickname);
+  } catch {
+    // Storage blocked (private mode etc.): the placeholder just won't persist.
+  }
+}
 
 /** Maps a Supabase AuthError (always English) to a translation key so the UI
  * can show a localized, friendly message instead of the raw API text. */
@@ -53,17 +65,28 @@ export class SupabaseService {
     });
   }
 
-  async signInAnonymously(nickname: string): Promise<AuthResult> {
-    const { error } = await this.client.auth.signInAnonymously({
-      options: { data: { nickname, is_anonymous: true } },
-    });
-    return { error };
-  }
+  /** The nickname is purely cosmetic (not unique, freely repeatable): reuses
+   * the current anonymous session if there is one and just renames it,
+   * otherwise signs in anonymously with it. */
+  async enterWithNickname(nickname: string): Promise<AuthResult> {
+    rememberNickname(nickname);
 
-  /** Pre-check so a taken nickname is caught before even attempting sign-in. */
-  async isNicknameTaken(nickname: string): Promise<boolean> {
-    const { data } = await this.client.from('profiles').select('id').eq('nickname', nickname).maybeSingle();
-    return !!data;
+    const userId = this.session()?.user.id;
+    if (!userId) {
+      const { error } = await this.client.auth.signInAnonymously({
+        options: { data: { nickname, is_anonymous: true } },
+      });
+      return { error };
+    }
+
+    if (nickname === this.sessionNickname()) {
+      return { error: null };
+    }
+    // profiles first: updateUser fires USER_UPDATED, which makes
+    // ProfileService reload the row — it should already hold the new name.
+    await this.client.from('profiles').update({ nickname }).eq('id', userId);
+    const { error } = await this.client.auth.updateUser({ data: { nickname } });
+    return { error };
   }
 
   async signOut(): Promise<void> {

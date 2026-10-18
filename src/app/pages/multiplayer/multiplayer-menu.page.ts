@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from 
 import { Router } from '@angular/router';
 import { animate } from 'animejs/animation';
 import { I18nService } from '../../core/services/i18n.service';
-import { authErrorKey, SupabaseService } from '../../core/services/supabase.service';
+import { authErrorKey, lastNickname, SupabaseService } from '../../core/services/supabase.service';
 
 @Component({
   selector: 'app-multiplayer-menu-page',
@@ -14,6 +14,9 @@ export class MultiplayerMenuPage implements AfterViewInit {
   private readonly router = inject(Router);
 
   readonly nickname = signal('');
+  /** Previous nickname (this session's, or the last one used on this
+   * browser): shown as placeholder and used if the field is left empty. */
+  readonly previousNickname = this.supabase.sessionNickname() ?? lastNickname();
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
 
@@ -36,25 +39,26 @@ export class MultiplayerMenuPage implements AfterViewInit {
   }
 
   async confirmNickname(): Promise<void> {
-    const value = this.nickname().trim();
-    if (!value) {
+    const value = this.nickname().trim() || this.previousNickname?.trim();
+    if (!value || this.submitting()) {
       return;
     }
     this.submitting.set(true);
     this.error.set(null);
 
-    if (await this.supabase.isNicknameTaken(value)) {
+    try {
+      const { error } = await this.supabase.enterWithNickname(value);
+      if (error) {
+        this.error.set(this.i18n.t(authErrorKey(error)));
+        return;
+      }
+      this.goToRooms();
+    } catch {
+      // Network failure (server unreachable): fetch throws instead of
+      // returning an error object.
+      this.error.set(this.i18n.t('auth.genericError'));
+    } finally {
       this.submitting.set(false);
-      this.error.set(this.i18n.t('mp.errorNicknameTaken'));
-      return;
     }
-
-    const { error } = await this.supabase.signInAnonymously(value);
-    this.submitting.set(false);
-    if (error) {
-      this.error.set(this.i18n.t(authErrorKey(error)));
-      return;
-    }
-    this.goToRooms();
   }
 }

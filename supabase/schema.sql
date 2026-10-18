@@ -11,11 +11,14 @@
 -- ── profiles ────────────────────────────────────────────────────────────
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
-  nickname text not null unique,
+  nickname text not null,
   avatar_url text,
   is_anonymous boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- Nickname é só visual: pode repetir à vontade (remove a unique antiga).
+alter table public.profiles drop constraint if exists profiles_nickname_key;
 
 alter table public.profiles enable row level security;
 

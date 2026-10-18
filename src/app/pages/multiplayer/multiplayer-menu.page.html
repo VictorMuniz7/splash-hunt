@@ -10,42 +10,28 @@
   </div>
 
   <div class="mt-6 flex flex-col items-center gap-4">
-    @if (supabase.session()) {
-      <p class="text-sm text-[#cbb9d6]/80">
-        {{ i18n.t('mp.greeting') }}
-        <span class="font-semibold text-splash-gold">{{ supabase.sessionNickname() }}</span>
-      </p>
+    <div class="flex w-full max-w-sm flex-col items-center gap-3 sm:flex-row">
+      <input
+        type="text"
+        class="w-full rounded-lg border border-splash-gold/25 bg-black/40 px-4 py-2.5 text-sm text-[#f4e9d8] outline-none transition placeholder:text-[#cbb9d6]/40 focus:border-splash-magenta/60"
+        [placeholder]="previousNickname || i18n.t('mp.nicknamePlaceholder')"
+        [value]="nickname()"
+        (input)="nickname.set($any($event.target).value)"
+        (keydown.enter)="confirmNickname()"
+        maxlength="24"
+        autofocus
+      />
       <button
         type="button"
-        class="cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-8 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30"
-        (click)="goToRooms()"
+        class="w-full shrink-0 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30 sm:w-auto"
+        [disabled]="!(nickname().trim() || previousNickname) || submitting()"
+        (click)="confirmNickname()"
       >
-        {{ i18n.t('mp.play') }}
+        {{ i18n.t('mp.confirm') }}
       </button>
-    } @else {
-      <div class="flex w-full max-w-sm flex-col items-center gap-3 sm:flex-row">
-        <input
-          type="text"
-          class="w-full rounded-lg border border-splash-gold/25 bg-black/40 px-4 py-2.5 text-sm text-[#f4e9d8] outline-none transition placeholder:text-[#cbb9d6]/40 focus:border-splash-magenta/60"
-          [placeholder]="i18n.t('mp.nicknamePlaceholder')"
-          [value]="nickname()"
-          (input)="nickname.set($any($event.target).value)"
-          (keydown.enter)="confirmNickname()"
-          maxlength="24"
-          autofocus
-        />
-        <button
-          type="button"
-          class="w-full shrink-0 cursor-pointer rounded-lg border-2 border-splash-gold/50 bg-splash-magenta/20 px-6 py-2.5 text-sm font-semibold uppercase tracking-widest text-[#f4e9d8] transition hover:bg-splash-magenta/30 disabled:cursor-not-allowed disabled:opacity-30 sm:w-auto"
-          [disabled]="!nickname().trim() || submitting()"
-          (click)="confirmNickname()"
-        >
-          {{ i18n.t('mp.confirm') }}
-        </button>
-      </div>
-      @if (error(); as err) {
-        <p class="text-xs text-splash-wine">{{ err }}</p>
-      }
+    </div>
+    @if (error(); as err) {
+      <p class="text-xs text-splash-wine">{{ err }}</p>
     }
   </div>
 </section>
