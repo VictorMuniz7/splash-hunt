@@ -192,6 +192,36 @@ export class MatchService {
     return { error: error?.message ?? null };
   }
 
+  /** How far this device's clock is from the server's (ms to add to Date.now()). */
+  private clockOffsetMs = 0;
+  private clockSynced?: Promise<void>;
+
+  /** Round deadlines come from the server's clock (started_at), so countdowns
+   * must use server time too: a device running 20s behind would otherwise
+   * show 20s extra. Measured once per page load against /api/time (Vercel);
+   * if that's unavailable (e.g. local `ng serve`), falls back to the device
+   * clock. */
+  syncClock(): Promise<void> {
+    this.clockSynced ??= (async () => {
+      try {
+        const sentAt = Date.now();
+        const res = await fetch('/api/time', { cache: 'no-store' });
+        const receivedAt = Date.now();
+        const { now } = (await res.json()) as { now: number };
+        if (typeof now === 'number') {
+          this.clockOffsetMs = now - (sentAt + receivedAt) / 2;
+        }
+      } catch {
+        // No time endpoint: keep the device clock.
+      }
+    })();
+    return this.clockSynced;
+  }
+
+  serverNow(): number {
+    return Date.now() + this.clockOffsetMs;
+  }
+
   async resolveRoundTimeout(roundId: string): Promise<{ error: string | null }> {
     const { error } = await this.supabase.client.rpc('resolve_round_timeout', { p_round_id: roundId });
     return { error: error?.message ?? null };

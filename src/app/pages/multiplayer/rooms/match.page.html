@@ -19,7 +19,7 @@
     >
       <div class="hidden lg:block" aria-hidden="true"></div>
 
-      <div class="flex w-full max-w-2xl flex-col items-center gap-5 justify-self-center">
+      <div class="flex w-full max-w-[46rem] flex-col items-center gap-5 justify-self-center">
         <app-mode-badges [modes]="activeModes()" />
 
         <div class="flex items-center gap-6 sm:gap-10">
@@ -58,8 +58,8 @@
         }
 
         <div
-          class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border-2 border-splash-gold/25 bg-black/40 shadow-2xl shadow-black/60 transition-[aspect-ratio] duration-500 ease-out"
-          [class]="isFullReveal() ? 'aspect-[16/9]' : 'aspect-square'"
+          class="relative mx-auto w-full overflow-hidden rounded-2xl border-2 border-splash-gold/25 bg-black/40 shadow-2xl shadow-black/60 transition-[aspect-ratio,max-width] duration-500 ease-out"
+          [class]="isFullReveal() ? 'aspect-[16/9] max-w-[46rem]' : 'aspect-square max-w-md'"
         >
           @if (isVultoMode() && vultoHidden() && round.status === 'active') {
             <div

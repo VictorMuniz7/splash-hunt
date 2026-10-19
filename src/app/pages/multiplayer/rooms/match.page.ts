@@ -252,14 +252,16 @@ export class MatchPage implements OnInit, OnDestroy {
     const [rounds, attempts] = await Promise.all([
       this.matchService.fetchRounds(match.id),
       this.matchService.fetchAttempts(match.id),
+      this.matchService.syncClock(),
     ]);
+    this.now.set(this.matchService.serverNow());
     this.rounds.set(rounds);
     this.attempts.set(attempts);
     this.loading.set(false);
 
     this.channel = this.matchService.subscribeToMatch(match.id, () => this.refresh(match.id));
     this.tickHandle = setInterval(() => {
-      this.now.set(Date.now());
+      this.now.set(this.matchService.serverNow());
       this.checkTimeout();
     }, 1000);
   }
@@ -301,7 +303,15 @@ export class MatchPage implements OnInit, OnDestroy {
       return;
     }
     this.timeoutTriggeredFor = round.id;
-    void this.matchService.resolveRoundTimeout(round.id);
+    void this.matchService.resolveRoundTimeout(round.id).then(({ error }) => {
+      // The server re-checks the deadline with its own clock. If this
+      // device's clock runs a bit ahead, it rejects the call; without
+      // retrying, the round would sit at "0s" until the opponent's client
+      // (or nobody) closed it. Clearing the flag retries on the next tick.
+      if (error && this.timeoutTriggeredFor === round.id) {
+        this.timeoutTriggeredFor = null;
+      }
+    });
   }
 
   private scheduleNextRound(matchId: string, delayMs: number): void {
